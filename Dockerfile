@@ -5,13 +5,16 @@ RUN apk --update add ca-certificates
 RUN echo "@php https://php.codecasts.rocks/v3.7/php-7.2" >> /etc/apk/repositories
 RUN apk add --no-cache alpine-sdk autoconf nodejs git automake libtool libsecp256k1@php
 
-RUN git clone https://github.com/peterromfeldhk/poa-explorer.git
-
+ENV SHA 6d15d2be2f0487dacb2e9c646f55b9fa235503fe
 ENV MIX_ENV prod
 ENV PORT ${PORT:-4000}
 EXPOSE $PORT
 
+RUN git clone https://github.com/peterromfeldhk/poa-explorer
+
 WORKDIR /poa-explorer
+
+RUN git checkout $SHA
 
 #RUN sed -i 's/coin: "POA"/coin: "TKC"/g' apps/*/config/config.exs
 RUN mix local.hex --force
